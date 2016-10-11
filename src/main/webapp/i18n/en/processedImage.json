@@ -1,0 +1,22 @@
+{
+    "recognizerApp": {
+        "processedImage" : {
+            "home": {
+                "title": "Processed Images",
+                "createLabel": "Create a new Processed Image",
+                "createOrEditLabel": "Create or edit a Processed Image",
+                "search": "Search for Processed Image"
+            },
+            "created": "A new Processed Image is created with identifier {{ param }}",
+            "updated": "A Processed Image is updated with identifier {{ param }}",
+            "deleted": "A Processed Image is deleted with identifier {{ param }}",
+            "delete": {
+                "question": "Are you sure you want to delete Processed Image {{ id }}?"
+            },
+            "detail": {
+                "title": "Processed Image"
+            },
+            "path": "Path"
+        }
+    }
+}
