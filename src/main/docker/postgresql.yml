@@ -1,0 +1,12 @@
+version: '2'
+services:
+    recognizer-postgresql:
+        container_name: recognizer-postgresql
+        image: postgres:9.5.4
+        # volumes:
+        #     - ~/volumes/jhipster/recognizer/postgresql/:/var/lib/postgresql/
+        environment:
+            - POSTGRES_USER=recognizer
+            - POSTGRES_PASSWORD=
+        ports:
+            - 5432:5432
