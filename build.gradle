@@ -27,12 +27,20 @@ apply plugin: 'spring-boot'
 apply plugin: 'war'
 apply plugin: 'propdeps'
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'idea'
 /* downgrade Hibernate to 4.3 */
 ext['hibernate.version'] = '${hibernate_entitymanager_version}'
 defaultTasks 'bootRun'
 
 bootRepackage {
    mainClass = 'com.g9labs.recognizer.RecognizerApp'
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
 }
 
 war {

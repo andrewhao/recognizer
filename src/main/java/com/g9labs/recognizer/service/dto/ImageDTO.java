@@ -1,9 +1,9 @@
 package com.g9labs.recognizer.service.dto;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Objects;
 
 
@@ -11,15 +11,15 @@ import java.util.Objects;
  * A DTO for the Image entity.
  */
 public class ImageDTO implements Serializable {
-
     private Long id;
 
     @NotNull
     private String path;
 
+    private MultipartFile file;
 
     private Long processedImageId;
-    
+
     public Long getId() {
         return id;
     }
@@ -41,6 +41,14 @@ public class ImageDTO implements Serializable {
 
     public void setProcessedImageId(Long processedImageId) {
         this.processedImageId = processedImageId;
+    }
+
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
 
     @Override
@@ -69,6 +77,7 @@ public class ImageDTO implements Serializable {
         return "ImageDTO{" +
             "id=" + id +
             ", path='" + path + "'" +
+            ", file='" + file + "'" +
             '}';
     }
 }

@@ -14,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
@@ -32,7 +34,7 @@ import java.util.stream.Collectors;
 public class ImageResource {
 
     private final Logger log = LoggerFactory.getLogger(ImageResource.class);
-        
+
     @Inject
     private ImageRepository imageRepository;
 
@@ -50,8 +52,7 @@ public class ImageResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<ImageDTO> createImage(@Valid @RequestBody ImageDTO imageDTO) throws URISyntaxException {
-        log.debug("REST request to save Image : {}", imageDTO);
+    public ResponseEntity<ImageDTO> createImage(@Valid ImageDTO imageDTO) throws URISyntaxException {
         if (imageDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("image", "idexists", "A new image cannot already have an ID")).body(null);
         }

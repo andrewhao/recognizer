@@ -10,6 +10,8 @@ import com.g9labs.recognizer.service.mapper.ImageMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,8 +21,10 @@ import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.mock.web.MockMultipartFile;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -31,6 +35,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+
+
 /**
  * Test class for the ImageResource REST controller.
  *
@@ -40,8 +46,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = RecognizerApp.class)
 public class ImageResourceIntTest {
 
-    private static final String DEFAULT_PATH = "AAAAA";
-    private static final String UPDATED_PATH = "BBBBB";
+    private static final String DEFAULT_PATH = "/tmp/path/to/something";
+    private static final String UPDATED_PATH = "/tmp/path/to/something";
 
     @Inject
     private ImageRepository imageRepository;
@@ -92,16 +98,19 @@ public class ImageResourceIntTest {
 
     @Test
     @Transactional
-    public void createImage() throws Exception {
+    public void shouldCreateImage() throws Exception {
         int databaseSizeBeforeCreate = imageRepository.findAll().size();
 
         // Create the Image
         ImageDTO imageDTO = imageMapper.imageToImageDTO(image);
 
-        restImageMockMvc.perform(post("/api/images")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(imageDTO)))
+        MockMultipartFile multipartFile =
+            new MockMultipartFile("file", "test.txt", "text/plain", "Spring Framework".getBytes());
+
+        restImageMockMvc.perform(fileUpload("/api/images").file(multipartFile).param("path", UPDATED_PATH))
                 .andExpect(status().isCreated());
+                //.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                //.andExpect(jsonPath("$.message").value(containsString("hello")));
 
         // Validate the Image in the database
         List<Image> images = imageRepository.findAll();
@@ -150,7 +159,7 @@ public class ImageResourceIntTest {
         imageRepository.saveAndFlush(image);
 
         // Get the image
-        restImageMockMvc.perform(get("/api/images/{id}", image.getId()))
+        ResultActions resultActions = restImageMockMvc.perform(get("/api/images/{id}", image.getId()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
             .andExpect(jsonPath("$.id").value(image.getId().intValue()))
