@@ -28,6 +28,7 @@
     "nativeLanguage": "en",
     "languages": [
       "en"
-    ]
+    ],
+    "herokuAppName": "recognizr"
   }
 }
