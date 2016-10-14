@@ -4,29 +4,23 @@ import com.codahale.metrics.annotation.Timed;
 import com.g9labs.recognizer.domain.Image;
 
 import com.g9labs.recognizer.repository.ImageRepository;
-import com.g9labs.recognizer.service.dto.ProcessedImageDTO;
+import com.g9labs.recognizer.service.ImageOCRConversionService;
 import com.g9labs.recognizer.web.rest.util.HeaderUtil;
 import com.g9labs.recognizer.service.dto.ImageDTO;
 import com.g9labs.recognizer.service.mapper.ImageMapper;
-import net.sourceforge.tess4j.ITesseract;
-import net.sourceforge.tess4j.Tesseract;
-import net.sourceforge.tess4j.TesseractException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.io.File;
 
 /**
  * REST controller for managing Image.
@@ -58,7 +52,7 @@ public class ImageResource {
         if (imageDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("image", "idexists", "A new image cannot already have an ID")).body(null);
         }
-        ImageDTO processedImage = new ImageOCRConversion(imageDTO).invoke();
+        ImageDTO processedImage = new ImageOCRConversionService(imageDTO).invoke();
 
         Image image = imageMapper.imageDTOToImage(processedImage);
         image = imageRepository.save(image);
@@ -146,37 +140,4 @@ public class ImageResource {
         return ResponseEntity.ok().headers(HeaderUtil.createEntityDeletionAlert("image", id.toString())).build();
     }
 
-    public class ImageOCRConversion {
-        private ImageDTO imageDTO;
-
-        public ImageOCRConversion(ImageDTO imageDTO) {
-            this.imageDTO = imageDTO;
-        }
-
-        public ImageDTO invoke() {
-            System.setProperty("jna.library.path", "/opt/boxen/homebrew/Cellar/tesseract/3.04.01_2/lib");
-            System.out.println(System.getenv());
-            System.out.println(System.getenv("TESSDATA_PREFIX"));
-            MultipartFile dtoFile = imageDTO.getFile();
-            File imageFile = new File(System.getProperty("user.dir") + "/tmp/" + dtoFile.getOriginalFilename());
-            try {
-                dtoFile.transferTo(imageFile);
-            } catch(IOException e) {
-                System.err.println(e.getMessage());
-            }
-
-            ITesseract tess = new Tesseract();
-            tess.setDatapath(System.getenv("TESSDATA_PREFIX") + "/tessdata");
-
-            try {
-                String recognizedText = tess.doOCR(imageFile).trim();
-                System.out.println(recognizedText);
-                imageDTO.setPath(recognizedText);
-            } catch (TesseractException e) {
-                System.err.println(e.getMessage());
-            }
-
-            return imageDTO;
-        }
-    }
 }

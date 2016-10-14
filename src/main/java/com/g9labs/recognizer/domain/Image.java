@@ -19,8 +19,7 @@ public class Image implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotNull
-    @Column(name = "path", nullable = false)
+    @Column(name = "path")
     private String path;
 
     @OneToOne
