@@ -29,12 +29,14 @@ import org.springframework.mock.web.MockMultipartFile;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import java.io.FileInputStream;
 import java.util.List;
+import java.io.File;
+
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 
 
 /**
@@ -103,20 +105,23 @@ public class ImageResourceIntTest {
 
         // Create the Image
         ImageDTO imageDTO = imageMapper.imageToImageDTO(image);
+        File imageFixture = new File(System.getProperty("user.dir") + "/src/test/java/com/g9labs/recognizer/fixtures/hello.png");
+        FileInputStream imageInputStream = new FileInputStream(imageFixture);
+        String expectedOCROutput = "hello";
 
         MockMultipartFile multipartFile =
-            new MockMultipartFile("file", "test.txt", "text/plain", "Spring Framework".getBytes());
+            new MockMultipartFile("file", "test.png", "image/png", imageInputStream);
 
-        restImageMockMvc.perform(fileUpload("/api/images").file(multipartFile).param("path", UPDATED_PATH))
-                .andExpect(status().isCreated());
-                //.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+        restImageMockMvc.perform(fileUpload("/api/images").file(multipartFile).param("path", "asdf"))
+                .andExpect(status().isCreated())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE));
                 //.andExpect(jsonPath("$.message").value(containsString("hello")));
 
         // Validate the Image in the database
         List<Image> images = imageRepository.findAll();
         assertThat(images).hasSize(databaseSizeBeforeCreate + 1);
         Image testImage = images.get(images.size() - 1);
-        assertThat(testImage.getPath()).isEqualTo(DEFAULT_PATH);
+        assertThat(testImage.getPath()).isEqualTo(expectedOCROutput);
     }
 
     @Test

@@ -8,16 +8,26 @@ Before you can build this project, you must install and configure the following 
 1. [Node.js][]: We use Node to run a development web server and build the project.
    Depending on your system, you can install Node either from source or as a pre-packaged bundle.
 
-After installing Node, you should be able to run the following command to install development tools (like
+      $ brew install node
+
+2. [Tesseract][]: Tesseract is an open source OCR library.
+
+      $ brew install tesseract
+
+You will need to set the `TESSDATA_PREFIX` environment variable to be the `/share` directory.
+Use `brew info tesseract` to get the base path to the library, then add
+`/share` to it to get the `TESSDATA_PREFIX`.
+
+3.  After installing Node, you should be able to run the following command to install development tools (like
 [Bower][] and [BrowserSync][]). You will only need to run this command when dependencies change in package.json.
 
     npm install
 
-We use [Gulp][] as our build system. Install the Gulp command-line tool globally with:
+4. We use [Gulp][] as our build system. Install the Gulp command-line tool globally with:
 
     npm install -g gulp-cli
 
-Run the following commands in two separate terminals to create a blissful development experience where your browser
+5. Run the following commands in two separate terminals to create a blissful development experience where your browser
 auto-refreshes when files change on your hard drive.
 
     ./gradlew
