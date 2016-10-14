@@ -13,7 +13,6 @@ import java.util.Objects;
 public class ImageDTO implements Serializable {
     private Long id;
 
-    @NotNull
     private String path;
 
     private MultipartFile file;
