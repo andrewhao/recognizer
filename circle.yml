@@ -1,0 +1,15 @@
+machine:
+  java:
+    version: oraclejdk8
+test:
+  override:
+    - ./gradlew clean
+    - ./gradlew test
+    - gulp test
+  post:
+    - mkdir -p $CIRCLE_TEST_REPORTS/junit/
+    - find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;
+    # - ./gradlew bootRepackage -Pprod -x test
+dependencies:
+  pre:
+    - if [[ ! -e /usr/bin/tesseract ]]; then sudo apt-get install tesseract-ocr; fi
