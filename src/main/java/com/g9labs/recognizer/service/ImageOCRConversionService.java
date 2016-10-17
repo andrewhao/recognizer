@@ -24,26 +24,39 @@ public class ImageOCRConversionService {
         if (isMacOS()) {
             System.setProperty("jna.library.path", "/opt/boxen/homebrew/Cellar/tesseract/3.04.01_2/lib");
         }
+        String tessdataPrefix = System.getenv("TESSDATA_PREFIX");
+        System.out.println("env vars:");
         System.out.println(System.getenv());
-        System.out.println(System.getenv("TESSDATA_PREFIX"));
+        System.out.println("TESSDATA_PREFIX:");
+        System.out.println(tessdataPrefix);
+
         MultipartFile dtoFile = imageDTO.getFile();
         String tmpDirPath = System.getProperty("user.dir") + "/tmp/";
         File imageFile = new File(tmpDirPath + dtoFile.getOriginalFilename());
-        imageFile.mkdirs();
+        boolean successfulMkdir = new File(tmpDirPath).mkdirs();
+
+        if (!successfulMkdir) { System.out.println("oops, couldn't create dir"); }
+
         try {
             dtoFile.transferTo(imageFile);
         } catch (IOException e) {
+            System.out.println("Oops, transfer failed.");
             System.err.println(e.getMessage());
         }
 
         ITesseract tess = new Tesseract();
-        tess.setDatapath(System.getenv("TESSDATA_PREFIX") + "/tessdata");
+        if (tessdataPrefix != null) {
+            tess.setDatapath(System.getenv("TESSDATA_PREFIX") + "/tessdata");
+        }
+        System.out.println("imageFile");
+        System.out.println(imageFile);
 
         try {
             String recognizedText = tess.doOCR(imageFile).trim();
             System.out.println(recognizedText);
             imageDTO.setPath(recognizedText);
         } catch (TesseractException e) {
+            System.out.println("Oops, doOCR failed.");
             System.err.println(e.getMessage());
         }
 
