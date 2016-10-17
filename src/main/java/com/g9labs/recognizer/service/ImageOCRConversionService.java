@@ -27,7 +27,9 @@ public class ImageOCRConversionService {
         System.out.println(System.getenv());
         System.out.println(System.getenv("TESSDATA_PREFIX"));
         MultipartFile dtoFile = imageDTO.getFile();
-        File imageFile = new File(System.getProperty("user.dir") + "/tmp/" + dtoFile.getOriginalFilename());
+        String tmpDirPath = System.getProperty("user.dir") + "/tmp/";
+        File imageFile = new File(tmpDirPath + dtoFile.getOriginalFilename());
+        imageFile.mkdirs();
         try {
             dtoFile.transferTo(imageFile);
         } catch (IOException e) {
