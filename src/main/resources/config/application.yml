@@ -48,7 +48,7 @@ security:
 # Tesseract (Tess4J) specific properties
 # ===================================================================
 tesseract:
-    tessdata_path: /opt/boxen/homebrew/Cellar/tesseract/3.04.01_2
+    lib_path: /opt/boxen/homebrew/Cellar/tesseract/3.04.01_2
 
 # ===================================================================
 # JHipster specific properties

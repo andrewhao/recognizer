@@ -20,7 +20,10 @@ public class ImageOCRConversionService {
     }
 
     public ImageDTO invoke() {
-        System.setProperty("jna.library.path", "/opt/boxen/homebrew/Cellar/tesseract/3.04.01_2/lib");
+        // Workaround required for mac - OK, my laptop.
+        if (isMacOS()) {
+            System.setProperty("jna.library.path", "/opt/boxen/homebrew/Cellar/tesseract/3.04.01_2/lib");
+        }
         System.out.println(System.getenv());
         System.out.println(System.getenv("TESSDATA_PREFIX"));
         MultipartFile dtoFile = imageDTO.getFile();
@@ -43,5 +46,11 @@ public class ImageOCRConversionService {
         }
 
         return imageDTO;
+    }
+
+    private boolean isMacOS() {
+        String osName = System.getProperty("os.name").toLowerCase();
+        boolean isMacOs = osName.startsWith("mac os x");
+        return isMacOs;
     }
 }
