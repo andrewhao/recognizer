@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasItem;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,6 +29,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.io.File;
 
@@ -101,16 +101,13 @@ public class ImageResourceIntTest {
     @Test
     @Transactional
     public void shouldCreateImage() throws Exception {
+        String expectedOCROutput = "hello";
         int databaseSizeBeforeCreate = imageRepository.findAll().size();
 
         // Create the Image
         ImageDTO imageDTO = imageMapper.imageToImageDTO(image);
-        File imageFixture = new File(System.getProperty("user.dir") + "/src/test/java/com/g9labs/recognizer/fixtures/hello.png");
-        FileInputStream imageInputStream = new FileInputStream(imageFixture);
-        String expectedOCROutput = "hello";
 
-        MockMultipartFile multipartFile =
-            new MockMultipartFile("file", "test.png", "image/png", imageInputStream);
+        MockMultipartFile multipartFile = makeMockMultipartFile();
 
         restImageMockMvc.perform(fileUpload("/api/images").file(multipartFile).param("path", "asdf"))
                 .andExpect(status().isCreated())
@@ -122,25 +119,6 @@ public class ImageResourceIntTest {
         assertThat(images).hasSize(databaseSizeBeforeCreate + 1);
         Image testImage = images.get(images.size() - 1);
         assertThat(testImage.getPath()).isEqualTo(expectedOCROutput);
-    }
-
-    @Test
-    @Transactional
-    public void checkPathIsRequired() throws Exception {
-        int databaseSizeBeforeTest = imageRepository.findAll().size();
-        // set the field null
-        image.setPath(null);
-
-        // Create the Image, which fails.
-        ImageDTO imageDTO = imageMapper.imageToImageDTO(image);
-
-        restImageMockMvc.perform(post("/api/images")
-                .contentType(TestUtil.APPLICATION_JSON_UTF8)
-                .content(TestUtil.convertObjectToJsonBytes(imageDTO)))
-                .andExpect(status().isBadRequest());
-
-        List<Image> images = imageRepository.findAll();
-        assertThat(images).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
@@ -220,4 +198,16 @@ public class ImageResourceIntTest {
         List<Image> images = imageRepository.findAll();
         assertThat(images).hasSize(databaseSizeBeforeDelete - 1);
     }
+
+    private MockMultipartFile makeMockMultipartFile() throws IOException {
+        File imageFixture = new File(System.getProperty("user.dir") + "/src/test/java/com/g9labs/recognizer/fixtures/hello.png");
+        FileInputStream imageInputStream = new FileInputStream(imageFixture);
+        String expectedOCROutput = "hello";
+
+        MockMultipartFile multipartFile =
+            new MockMultipartFile("file", "test.png", "image/png", imageInputStream);
+
+        return multipartFile;
+    }
+
 }
