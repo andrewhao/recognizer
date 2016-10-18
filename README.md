@@ -98,9 +98,14 @@ Then run:
 
 For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the docker-compose sub-generator (`yo jhipster:docker-compose`), which is able to generate docker configurations for one or several JHipster applications.
 
-## Continuous Integration (optional)
+## Continuous Integration
 
-To set up a CI environment, consult the [Setting up Continuous Integration][] page.
+See: CircleCI
+
+## Deployment on Heroku
+
+TBD
+
 
 [JHipster Homepage and latest documentation]: https://jhipster.github.io
 [JHipster 3.9.1 archive]: https://jhipster.github.io/documentation-archive/v3.9.1
