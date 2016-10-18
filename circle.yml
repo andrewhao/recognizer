@@ -12,4 +12,9 @@ test:
     # - ./gradlew bootRepackage -Pprod -x test
 dependencies:
   pre:
+    - mkdir -p ~/cache
     - if [[ ! -e /usr/bin/tesseract ]]; then sudo apt-get install tesseract-ocr; fi
+    - if [[ ! -e ~/cache/tessdata-master ]]; then cd ~/cache; wget 'https://github.com/tesseract-ocr/tessdata/archive/master.zip'; unzip master.zip; fi
+    - sudo mv ~/cache/tessdata-master /usr/local/share/tessdata
+  cache_directories:
+    - ~/cache
