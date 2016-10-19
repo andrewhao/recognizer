@@ -31,8 +31,14 @@ public class ImageOCRConversionService {
         System.out.println(tessdataPrefix);
 
         MultipartFile dtoFile = imageDTO.getFile();
+        System.out.println("dtoFile");
+        System.out.println(dtoFile);
         String tmpDirPath = System.getProperty("user.dir") + "/tmp/";
+        System.out.println("tmpDirPath");
+        System.out.println(tmpDirPath);
         File imageFile = new File(tmpDirPath + dtoFile.getOriginalFilename());
+        System.out.println("imageFile");
+        System.out.println(imageFile);
         boolean successfulMkdir = new File(tmpDirPath).mkdirs();
 
         if (!successfulMkdir) { System.out.println("oops, couldn't create dir"); }

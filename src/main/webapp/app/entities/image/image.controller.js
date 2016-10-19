@@ -5,14 +5,16 @@
         .module('recognizerApp')
         .controller('ImageController', ImageController);
 
-    ImageController.$inject = ['$scope', '$state', 'Image'];
+    ImageController.$inject = ['$scope', '$state', 'Image', 'Upload'];
 
-    function ImageController ($scope, $state, Image) {
+    function ImageController ($scope, $state, Image, Upload) {
         var vm = this;
-        
+
         vm.images = [];
 
         loadAll();
+
+        $scope.file = {};
 
         function loadAll() {
             Image.query(function(result) {

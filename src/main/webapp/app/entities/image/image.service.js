@@ -20,6 +20,24 @@
                     return data;
                 }
             },
+            'save': {
+                transformRequest: function (data, getHeadersFn) {
+                    var fd = new FormData();
+                    angular.forEach(data, function(value, key) {
+                        if (key !== "id" ) {
+                            fd.append(key, value);
+                        }
+                    });
+                    debugger;
+                    return fd;
+                },
+                transformResponse: function (data, foo, bar) {
+                    debugger;
+                    return data;
+                },
+                method: 'POST',
+                headers: { 'Content-Type': undefined, enctype: 'multipart/form-data' }
+            },
             'update': { method:'PUT' }
         });
     }

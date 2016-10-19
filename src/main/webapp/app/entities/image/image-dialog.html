@@ -14,6 +14,11 @@
                     ng-model="vm.image.id" readonly />
         </div>
         <div class="form-group">
+            <label for="file" data-translate="image.file">File</label>
+            <input type="text" class="form-control" id="file" name="file"
+                    ng-model="vm.image.file" />
+        </div>
+        <div class="form-group">
             <label class="control-label" data-translate="recognizerApp.image.path" for="field_path">Path</label>
             <input type="text" class="form-control" name="path" id="field_path"
                     ng-model="vm.image.path"

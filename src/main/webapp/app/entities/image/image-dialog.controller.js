@@ -5,9 +5,9 @@
         .module('recognizerApp')
         .controller('ImageDialogController', ImageDialogController);
 
-    ImageDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', '$q', 'entity', 'Image', 'ProcessedImage'];
+    ImageDialogController.$inject = ['$timeout', '$scope', '$stateParams', '$uibModalInstance', '$q', 'entity', 'Image', 'ProcessedImage', 'Upload'];
 
-    function ImageDialogController ($timeout, $scope, $stateParams, $uibModalInstance, $q, entity, Image, ProcessedImage) {
+    function ImageDialogController ($timeout, $scope, $stateParams, $uibModalInstance, $q, entity, Image, ProcessedImage, Upload) {
         var vm = this;
 
         vm.image = entity;
@@ -33,6 +33,7 @@
 
         function save () {
             vm.isSaving = true;
+
             if (vm.image.id !== null) {
                 Image.update(vm.image, onSaveSuccess, onSaveError);
             } else {

@@ -57,6 +57,7 @@ public class ImageResource {
         Image image = imageMapper.imageDTOToImage(processedImage);
         image = imageRepository.save(image);
         ImageDTO result = imageMapper.imageToImageDTO(image);
+        System.out.println(result);
         return ResponseEntity.created(new URI("/api/images/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("image", result.getId().toString()))
             .body(result);

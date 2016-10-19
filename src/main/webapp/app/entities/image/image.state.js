@@ -105,6 +105,7 @@
                         entity: function () {
                             return {
                                 path: null,
+                                file: null,
                                 id: null
                             };
                         }
