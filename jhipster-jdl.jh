@@ -1,0 +1,12 @@
+entity Image {
+  file ImageBlob
+}
+
+entity ProcessedImage {
+}
+
+relationship OneToOne {
+	Image{processedImage} to ProcessedImage
+}
+
+dto * with mapstruct

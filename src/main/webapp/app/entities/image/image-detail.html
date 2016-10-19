@@ -4,9 +4,14 @@
     <hr>
     <jhi-alert-error></jhi-alert-error>
     <dl class="dl-horizontal jh-entity-details">
-        <dt><span data-translate="recognizerApp.image.path">Path</span></dt>
+        <dt><span data-translate="recognizerApp.image.file">File</span></dt>
         <dd>
-            <span>{{vm.image.path}}</span>
+            <div ng-if="vm.image.file">
+                <a ng-click="vm.openFile(vm.image.fileContentType, vm.image.file)">
+                    <img data-ng-src="{{'data:' + vm.image.fileContentType + ';base64,' + vm.image.file}}" style="max-width: 100%;"/>
+                </a>
+                {{vm.image.fileContentType}}, {{vm.byteSize(vm.image.file)}}
+            </div>
         </dd>
         <dt><span data-translate="recognizerApp.image.processedImage">Processed Image</span></dt>
         <dd>

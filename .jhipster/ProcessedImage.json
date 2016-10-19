@@ -1,15 +1,7 @@
 {
     "fluentMethods": true,
     "relationships": [],
-    "fields": [
-        {
-            "fieldName": "path",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        }
-    ],
+    "fields": [],
     "changelogDate": "20161011204616",
     "entityTableName": "processed_image",
     "dto": "mapstruct",

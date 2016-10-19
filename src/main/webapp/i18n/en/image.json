@@ -17,6 +17,7 @@
                 "title": "Image"
             },
             "path": "Path",
+            "file": "File",
             "processedImage": "Processed Image"
         }
     }
