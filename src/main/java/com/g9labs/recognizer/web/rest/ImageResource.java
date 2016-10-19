@@ -48,19 +48,27 @@ public class ImageResource {
         method = RequestMethod.POST,
         produces = MediaType.APPLICATION_JSON_VALUE)
     @Timed
-    public ResponseEntity<ImageDTO> createImage(@Valid ImageDTO imageDTO) throws URISyntaxException {
+    public ResponseEntity<ImageDTO> createImage(@Valid @RequestBody ImageDTO imageDTO) throws URISyntaxException {
         if (imageDTO.getId() != null) {
             return ResponseEntity.badRequest().headers(HeaderUtil.createFailureAlert("image", "idexists", "A new image cannot already have an ID")).body(null);
         }
+        System.out.println(imageDTO);
         ImageDTO processedImage = new ImageOCRConversionService(imageDTO).invoke();
 
+        System.out.println("processedImage");
+        System.out.println(processedImage);
         Image image = imageMapper.imageDTOToImage(processedImage);
+        System.out.println("Image");
+        System.out.println(image);
         image = imageRepository.save(image);
+        System.out.println("Image Saved");
+        System.out.println(image);
         ImageDTO result = imageMapper.imageToImageDTO(image);
-        System.out.println(result);
-        return ResponseEntity.created(new URI("/api/images/" + result.getId()))
+        ResponseEntity re = ResponseEntity.created(new URI("/api/images/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert("image", result.getId().toString()))
             .body(result);
+        System.out.println(re);
+        return re;
     }
 
     /**

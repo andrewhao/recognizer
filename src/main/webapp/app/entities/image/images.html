@@ -20,6 +20,7 @@
                 <tr>
                     <th><span data-translate="global.field.id">ID</span></th>
                     <th><span data-translate="recognizerApp.image.file">File</span></th>
+                    <th><span data-translate="recognizerApp.image.path">Result</span></th>
                     <th><span data-translate="recognizerApp.image.processedImage">Processed Image</span></th>
                     <th></th>
                 </tr>
@@ -33,6 +34,7 @@
                         </a>
                         <span ng-if="image.file">{{image.fileContentType}}, {{vm.byteSize(image.file)}}</span>
                     </td>
+                    <td><a ui-sref="image-detail({path:image.path})">{{image.path}}</a></td>
                     <td>
                         <a ui-sref="processed-image-detail({id:image.processedImageId})">{{image.processedImageId}}</a>
                     </td>

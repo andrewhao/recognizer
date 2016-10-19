@@ -22,10 +22,10 @@ public class ImageDTOTest {
     }
 
     @Test
-    public void expectFileSetting() throws Exception {
+    public void expectFileContentType() throws Exception {
         ImageDTO subject = new ImageDTO();
-        MockMultipartFile mockFile = new MockMultipartFile("file", "image.jpg", "image/jpeg", "imgdata".getBytes());
-        subject.setFile(mockFile);
-        assertEquals(subject.getFile(), mockFile);
+        String fileContentType = "image/png";
+        subject.setFileContentType(fileContentType);
+        assertEquals(fileContentType, subject.getFileContentType());
     }
 }
