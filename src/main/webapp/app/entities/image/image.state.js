@@ -104,8 +104,8 @@
                     resolve: {
                         entity: function () {
                             return {
-                                path: null,
                                 file: null,
+                                fileContentType: null,
                                 id: null
                             };
                         }

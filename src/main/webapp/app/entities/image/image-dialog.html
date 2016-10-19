@@ -1,5 +1,5 @@
 
-<form name="editForm" role="form" novalidate ng-submit="vm.save()" show-validation>
+<form name="editForm" role="form" novalidate ng-submit="vm.save()">
 
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"
@@ -13,22 +13,27 @@
             <input type="text" class="form-control" id="id" name="id"
                     ng-model="vm.image.id" readonly />
         </div>
-        <div class="form-group">
-            <label for="file" data-translate="image.file">File</label>
-            <input type="text" class="form-control" id="file" name="file"
-                    ng-model="vm.image.file" />
-        </div>
-        <div class="form-group">
-            <label class="control-label" data-translate="recognizerApp.image.path" for="field_path">Path</label>
-            <input type="text" class="form-control" name="path" id="field_path"
-                    ng-model="vm.image.path"
-                    required />
-            <div ng-show="editForm.path.$invalid">
-                <p class="help-block"
-                    ng-show="editForm.path.$error.required" data-translate="entity.validation.required">
-                    This field is required.
-                </p>
+        <div class="form-group" ngf-drop ngf-change="vm.setFile($file, vm.image)" ngf-pattern="'image/*'">
+            <label class="control-label" data-translate="recognizerApp.image.file" for="field_file">File</label>
+            <div>
+                <img data-ng-src="{{'data:' + vm.image.fileContentType + ';base64,' + vm.image.file}}" style="max-height: 100px;" ng-if="vm.image.file"/>
+                <div ng-if="vm.image.file" class="help-block clearfix">
+                    <span class="pull-left">{{vm.image.fileContentType}}, {{vm.byteSize(vm.image.file)}}</span>
+                    <button type="button" ng-click="vm.image.file=null;vm.image.fileContentType=null;"
+                            class="btn btn-default btn-xs pull-right">
+                        <span class="glyphicon glyphicon-remove"></span>
+                    </button>
+                </div>
+                <button type="button" ngf-select class="btn btn-default btn-block"
+                        ngf-change="vm.setFile($file, vm.image)" accept="image/*" data-translate="entity.action.addimage">
+                    Add image
+                </button>
             </div>
+            <input type="hidden" class="form-control" name="file" id="field_file"
+                    ng-model="vm.image.file"
+                     />
+            <input type="hidden" class="form-control" name="fileContentType" id="field_fileContentType"
+                    ng-model="vm.image.fileContentType" />
         </div>
 
         <div class="form-group">
