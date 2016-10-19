@@ -12,11 +12,9 @@
     ],
     "fields": [
         {
-            "fieldName": "path",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldName": "file",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "image"
         }
     ],
     "changelogDate": "20161011204615",
